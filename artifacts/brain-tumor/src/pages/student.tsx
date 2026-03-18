@@ -1,69 +1,32 @@
 import { useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
 import { motion } from "framer-motion";
-import { Home, Upload as UploadIcon, History as HistoryIcon, User, Settings, Bell, ChevronRight, FileImage, AlertTriangle, CheckCircle, ShieldAlert, HeartPulse } from "lucide-react";
+import { Home, Upload as UploadIcon, History as HistoryIcon, User, Settings, ChevronRight, FileImage, AlertTriangle, CheckCircle, ShieldAlert } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useGetScans, useUploadScan, useGetScanById, useRunAnalysis, useGetAnalysis } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { AppLayout } from "@/components/AppLayout";
 
-// --- STUDENT LAYOUT (Mobile First) ---
+const studentNav = [
+  { path: "/student/dashboard", icon: Home, label: "Home" },
+  { path: "/student/upload", icon: UploadIcon, label: "Upload" },
+  { path: "/student/history", icon: HistoryIcon, label: "History" },
+  { path: "/student/profile", icon: User, label: "Profile" },
+];
+
 export function StudentLayout({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
-  
-  const navItems = [
-    { path: "/student/dashboard", icon: Home, label: "Home" },
-    { path: "/student/upload", icon: UploadIcon, label: "Upload" },
-    { path: "/student/history", icon: HistoryIcon, label: "History" },
-    { path: "/student/profile", icon: User, label: "Profile" },
-  ];
-
   return (
-    <div className="bg-slate-50 min-h-screen">
-      <div className="max-w-md mx-auto bg-white min-h-screen shadow-2xl relative pb-24 overflow-x-hidden flex flex-col">
-        {/* Header */}
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <HeartPulse className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-display font-bold text-lg text-slate-900">NeuroScan</span>
-          </div>
-          <Link href="/student/notifications" className="relative p-2 bg-slate-50 rounded-full hover:bg-slate-100 transition-colors">
-            <Bell className="w-5 h-5 text-slate-600" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-destructive rounded-full border border-white"></span>
-          </Link>
-        </header>
-
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
-
-        {/* Bottom Navigation */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-6 py-3 pb-safe max-w-md mx-auto">
-          <ul className="flex justify-between items-center">
-            {navItems.map((item) => {
-              const isActive = location.startsWith(item.path);
-              const Icon = item.icon;
-              return (
-                <li key={item.path}>
-                  <Link href={item.path} className="flex flex-col items-center gap-1 p-2 w-16">
-                    <div className={`relative flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 ${isActive ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:text-slate-600'}`}>
-                      {isActive && <motion.div layoutId="nav-pill" className="absolute inset-0 bg-primary/10 rounded-xl" />}
-                      <Icon className={`w-5 h-5 relative z-10 ${isActive ? 'fill-primary/20' : ''}`} />
-                    </div>
-                    <span className={`text-[10px] font-medium transition-colors ${isActive ? 'text-primary' : 'text-slate-400'}`}>
-                      {item.label}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </div>
-    </div>
+    <AppLayout
+      navItems={studentNav}
+      roleBadge={
+        <span className="bg-[#2EC4A5]/10 text-[#2EC4A5] text-xs font-bold px-3 py-1 rounded-full">
+          Patient
+        </span>
+      }
+    >
+      {children}
+    </AppLayout>
   );
 }
 
@@ -75,7 +38,7 @@ export function StudentDashboard() {
   const { data: scansResponse, isLoading } = useGetScans({ query: { patientId: user?.id, limit: 3 } });
 
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-6 space-y-6">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       {/* Greeting */}
       <div>
         <h1 className="text-2xl font-display font-bold text-slate-900">Hi, {user?.fullName?.split(' ')[0] || 'User'} 👋</h1>
@@ -186,7 +149,7 @@ export function StudentUpload() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="p-6 h-full flex flex-col">
+    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col gap-6">
       <h1 className="text-2xl font-display font-bold text-slate-900 mb-6">Upload Scan</h1>
       
       <div className="flex-1 flex flex-col">
@@ -240,7 +203,7 @@ export function StudentHistory() {
   const { data, isLoading } = useGetScans({ query: { patientId: user?.id } });
   
   return (
-    <div className="p-6">
+    <div className="space-y-5">
       <h1 className="text-2xl font-display font-bold text-slate-900 mb-6">Scan History</h1>
       
       <div className="space-y-4">
@@ -384,7 +347,7 @@ export function StudentProfile() {
   const { user, logout } = useAuth();
   
   return (
-    <div className="p-6">
+    <div className="space-y-5">
       <h1 className="text-2xl font-display font-bold text-slate-900 mb-6">Profile</h1>
       
       <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col items-center mb-6">

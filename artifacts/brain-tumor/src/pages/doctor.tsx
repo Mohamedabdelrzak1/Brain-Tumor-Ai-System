@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
 import { motion } from "framer-motion";
-import { Home, FileImage, Activity, User, Bell, ChevronRight, CheckCircle, AlertTriangle, Clock, FileText, Send } from "lucide-react";
+import { Home, FileImage, Activity, User, ChevronRight, CheckCircle, AlertTriangle, FileText, Send } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import {
   useGetScans,
@@ -12,60 +12,27 @@ import {
 } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { AppLayout } from "@/components/AppLayout";
 
-// ─── Layout ───────────────────────────────────────────────────────────────────
+const doctorNav = [
+  { path: "/doctor/dashboard", icon: Home, label: "Home" },
+  { path: "/doctor/scans", icon: FileImage, label: "My Scans" },
+  { path: "/doctor/analysis", icon: Activity, label: "Analysis" },
+  { path: "/doctor/profile", icon: User, label: "Profile" },
+];
+
 export function DoctorLayout({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
-
-  const navItems = [
-    { path: "/doctor/dashboard", icon: Home, label: "Home" },
-    { path: "/doctor/scans", icon: FileImage, label: "My Scans" },
-    { path: "/doctor/analysis", icon: Activity, label: "Analysis" },
-    { path: "/doctor/profile", icon: User, label: "Profile" },
-  ];
-
   return (
-    <div className="bg-slate-50 min-h-screen">
-      <div className="max-w-md mx-auto bg-white min-h-screen shadow-2xl relative pb-24 overflow-x-hidden flex flex-col">
-        {/* Header */}
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#2EC4A5] flex items-center justify-center">
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26C17.81 13.47 19 11.38 19 9c0-3.87-3.13-7-7-7z" />
-              </svg>
-            </div>
-            <span className="font-bold text-slate-800 text-base">Brain Tumor</span>
-          </div>
-          <div className="relative p-2 bg-slate-50 rounded-full">
-            <Bell className="w-5 h-5 text-slate-600" />
-          </div>
-        </header>
-
-        <main className="flex-1 overflow-y-auto">{children}</main>
-
-        {/* Bottom Nav */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-6 py-3 max-w-md mx-auto">
-          <ul className="flex justify-between items-center">
-            {navItems.map((item) => {
-              const isActive = location.startsWith(item.path);
-              const Icon = item.icon;
-              return (
-                <li key={item.path}>
-                  <Link href={item.path} className="flex flex-col items-center gap-1 p-2 w-16">
-                    <div className={`relative flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 ${isActive ? "bg-[#2EC4A5]/10 text-[#2EC4A5]" : "text-slate-400"}`}>
-                      {isActive && <motion.div layoutId="doc-nav-pill" className="absolute inset-0 bg-[#2EC4A5]/10 rounded-xl" />}
-                      <Icon className="w-5 h-5 relative z-10" />
-                    </div>
-                    <span className={`text-[10px] font-medium ${isActive ? "text-[#2EC4A5]" : "text-slate-400"}`}>{item.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </div>
-    </div>
+    <AppLayout
+      navItems={doctorNav}
+      roleBadge={
+        <span className="bg-blue-50 text-blue-600 text-xs font-bold px-3 py-1 rounded-full">
+          Doctor
+        </span>
+      }
+    >
+      {children}
+    </AppLayout>
   );
 }
 
@@ -78,7 +45,7 @@ export function DoctorDashboard() {
   const reviewed = scans.filter(s => s.status === "reviewed").length;
 
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-6 space-y-6">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       {/* Greeting */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Hi, Dr. {user?.fullName?.split(" ")[0]} 👋</h1>
@@ -145,20 +112,20 @@ export function DoctorScans() {
   const scans = data?.scans || [];
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">My Scans</h1>
-      <div className="space-y-3">
+    <div className="space-y-5">
+      <h1 className="text-2xl md:text-3xl font-bold text-slate-900">My Scans</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {isLoading
-          ? [1, 2, 3].map(i => <div key={i} className="h-20 bg-slate-100 animate-pulse rounded-2xl" />)
+          ? [1, 2, 3, 4].map(i => <div key={i} className="h-20 bg-slate-100 animate-pulse rounded-2xl" />)
           : scans.length === 0
           ? (
-            <div className="text-center p-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <div className="col-span-2 text-center p-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
               <FileImage className="w-10 h-10 text-slate-300 mx-auto mb-2" />
               <p className="text-slate-500">No scans assigned yet</p>
             </div>
           )
           : scans.map(scan => (
-            <Link key={scan.id} href={`/doctor/scan/${scan.id}`} className="flex items-center gap-3 bg-white border border-slate-100 shadow-sm rounded-2xl p-4 active:scale-95 transition-transform">
+            <Link key={scan.id} href={`/doctor/scan/${scan.id}`} className="flex items-center gap-3 bg-white border border-slate-100 shadow-sm rounded-2xl p-4 hover:shadow-md transition-shadow">
               <div className="w-14 h-14 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0">
                 <img src={scan.imageUrl || `${import.meta.env.BASE_URL}images/brain-scan-placeholder.png`} className="w-full h-full object-cover" />
               </div>
@@ -182,7 +149,7 @@ export function DoctorAnalysis() {
   const analyses = (data as any)?.analyses || [];
 
   return (
-    <div className="p-6">
+    <div className="space-y-5">
       <h1 className="text-2xl font-bold text-slate-900 mb-6">AI Analysis</h1>
       <div className="space-y-3">
         {isLoading
@@ -356,7 +323,7 @@ export function DoctorScanDetail() {
 export function DoctorProfile() {
   const { user, logout } = useAuth();
   return (
-    <div className="p-6">
+    <div className="space-y-5">
       <h1 className="text-2xl font-bold text-slate-900 mb-6">Profile</h1>
       <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col items-center mb-6">
         <div className="w-24 h-24 bg-[#2EC4A5]/10 rounded-full flex items-center justify-center mb-4 text-[#2EC4A5] text-3xl font-bold">

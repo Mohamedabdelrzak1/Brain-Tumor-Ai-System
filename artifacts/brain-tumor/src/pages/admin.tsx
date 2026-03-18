@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { Home, Users, FileImage, Activity, ChevronRight, Bell, Shield, TrendingUp, CheckCircle } from "lucide-react";
+import { Home, Users, FileImage, Activity, ChevronRight, Shield, TrendingUp, CheckCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import {
   useGetStats,
@@ -11,65 +11,27 @@ import {
 } from "@workspace/api-client-react";
 import { format } from "date-fns";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { AppLayout } from "@/components/AppLayout";
 
-// ─── Layout ───────────────────────────────────────────────────────────────────
+const adminNav = [
+  { path: "/admin/dashboard", icon: Home, label: "Dashboard" },
+  { path: "/admin/users", icon: Users, label: "Users" },
+  { path: "/admin/scans", icon: FileImage, label: "All Scans" },
+  { path: "/admin/analysis", icon: Activity, label: "Analysis" },
+];
+
 export function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
-
-  const navItems = [
-    { path: "/admin/dashboard", icon: Home, label: "Home" },
-    { path: "/admin/users", icon: Users, label: "Users" },
-    { path: "/admin/scans", icon: FileImage, label: "Scans" },
-    { path: "/admin/analysis", icon: Activity, label: "Analysis" },
-  ];
-
   return (
-    <div className="bg-slate-50 min-h-screen">
-      <div className="max-w-md mx-auto bg-white min-h-screen shadow-2xl relative pb-24 overflow-x-hidden flex flex-col">
-        {/* Header */}
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#2EC4A5] flex items-center justify-center">
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26C17.81 13.47 19 11.38 19 9c0-3.87-3.13-7-7-7z" />
-              </svg>
-            </div>
-            <span className="font-bold text-slate-800 text-base">Brain Tumor</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="bg-[#2EC4A5]/10 text-[#2EC4A5] text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
-              <Shield className="w-3 h-3" /> Admin
-            </span>
-            <div className="relative p-2 bg-slate-50 rounded-full">
-              <Bell className="w-5 h-5 text-slate-600" />
-            </div>
-          </div>
-        </header>
-
-        <main className="flex-1 overflow-y-auto">{children}</main>
-
-        {/* Bottom Nav */}
-        <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-6 py-3 max-w-md mx-auto">
-          <ul className="flex justify-between items-center">
-            {navItems.map((item) => {
-              const isActive = location.startsWith(item.path);
-              const Icon = item.icon;
-              return (
-                <li key={item.path}>
-                  <Link href={item.path} className="flex flex-col items-center gap-1 p-2 w-16">
-                    <div className={`relative flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 ${isActive ? "bg-[#2EC4A5]/10 text-[#2EC4A5]" : "text-slate-400"}`}>
-                      {isActive && <motion.div layoutId="admin-nav-pill" className="absolute inset-0 bg-[#2EC4A5]/10 rounded-xl" />}
-                      <Icon className="w-5 h-5 relative z-10" />
-                    </div>
-                    <span className={`text-[10px] font-medium ${isActive ? "text-[#2EC4A5]" : "text-slate-400"}`}>{item.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </div>
-    </div>
+    <AppLayout
+      navItems={adminNav}
+      roleBadge={
+        <span className="bg-purple-50 text-purple-600 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+          <Shield className="w-3 h-3" /> Admin
+        </span>
+      }
+    >
+      {children}
+    </AppLayout>
   );
 }
 
@@ -85,63 +47,63 @@ export function AdminDashboard() {
   const PIE_COLORS = ["#f43f5e", "#2EC4A5"];
 
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-6 space-y-6">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       {/* Greeting */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Hi, {user?.fullName?.split(" ")[0]} 👋</h1>
-        <p className="text-slate-500 mt-1">System overview at a glance.</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">System Overview 📊</h1>
+        <p className="text-slate-500 mt-1">Real-time platform statistics and analytics.</p>
       </div>
 
-      {/* Hero stats */}
-      <div className="bg-gradient-to-br from-[#2EC4A5] to-teal-700 rounded-3xl p-6 text-white shadow-xl shadow-[#2EC4A5]/20 relative overflow-hidden">
-        <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
-        <div className="relative z-10 grid grid-cols-2 gap-5">
+      {/* Stats cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: "Total Users", value: stats?.totalUsers || 0, color: "bg-blue-50 text-blue-600 border-blue-100" },
+          { label: "Total Scans", value: stats?.totalScans || 0, color: "bg-purple-50 text-purple-600 border-purple-100" },
+          { label: "Analyzed", value: stats?.analyzedScans || 0, color: "bg-[#2EC4A5]/10 text-[#2EC4A5] border-[#2EC4A5]/20" },
+          { label: "Pending", value: stats?.pendingScans || 0, color: "bg-amber-50 text-amber-600 border-amber-100" },
+        ].map(s => (
+          <div key={s.label} className={`rounded-2xl p-5 border ${s.color} flex flex-col gap-1`}>
+            <p className="text-3xl font-bold">{isLoading ? "…" : s.value}</p>
+            <p className="text-sm font-medium opacity-70">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Chart + Quick links row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Pie Chart */}
+        <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+          <h3 className="font-bold text-slate-900 mb-4">Diagnostic Outcomes</h3>
+          <div className="h-48">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={pieData} cx="50%" cy="50%" innerRadius={55} outerRadius={75} paddingAngle={5} dataKey="value" stroke="none">
+                  {pieData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i]} />)}
+                </Pie>
+                <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #f1f5f9", fontSize: 12 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex justify-center gap-6">
+            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-rose-500" /><span className="text-xs text-slate-500">Malignant</span></div>
+            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#2EC4A5]" /><span className="text-xs text-slate-500">Benign / Normal</span></div>
+          </div>
+        </div>
+
+        {/* Quick links */}
+        <div className="grid grid-cols-2 gap-3 content-start">
           {[
-            { label: "Total Users", value: stats?.totalUsers || 0 },
-            { label: "Total Scans", value: stats?.totalScans || 0 },
-            { label: "Analyzed", value: stats?.analyzedScans || 0 },
-            { label: "Pending", value: stats?.pendingScans || 0 },
-          ].map(s => (
-            <div key={s.label}>
-              <p className="text-3xl font-bold">{isLoading ? "…" : s.value}</p>
-              <p className="text-teal-100 text-xs mt-0.5">{s.label}</p>
-            </div>
+            { label: "Manage Users", icon: Users, path: "/admin/users", color: "bg-blue-50 text-blue-600 border-blue-100" },
+            { label: "View All Scans", icon: FileImage, path: "/admin/scans", color: "bg-purple-50 text-purple-600 border-purple-100" },
+            { label: "AI Analysis", icon: Activity, path: "/admin/analysis", color: "bg-[#2EC4A5]/10 text-[#2EC4A5] border-[#2EC4A5]/20" },
+            { label: "Statistics", icon: TrendingUp, path: "/admin/dashboard", color: "bg-amber-50 text-amber-600 border-amber-100" },
+          ].map(item => (
+            <Link key={item.path} href={item.path} className={`flex items-center gap-3 p-4 rounded-2xl border ${item.color} hover:opacity-80 transition-opacity`}>
+              <item.icon className="w-5 h-5 flex-shrink-0" />
+              <span className="font-semibold text-sm">{item.label}</span>
+            </Link>
           ))}
         </div>
-      </div>
-
-      {/* Pie Chart */}
-      <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-        <h3 className="font-bold text-slate-900 mb-4">Diagnostic Outcomes</h3>
-        <div className="h-48">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" innerRadius={55} outerRadius={75} paddingAngle={5} dataKey="value" stroke="none">
-                {pieData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i]} />)}
-              </Pie>
-              <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #f1f5f9", fontSize: 12 }} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="flex justify-center gap-6">
-          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-rose-500" /><span className="text-xs text-slate-500">Malignant</span></div>
-          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#2EC4A5]" /><span className="text-xs text-slate-500">Benign / Normal</span></div>
-        </div>
-      </div>
-
-      {/* Quick links */}
-      <div className="grid grid-cols-2 gap-3">
-        {[
-          { label: "Manage Users", icon: Users, path: "/admin/users", color: "bg-blue-50 text-blue-600 border-blue-100" },
-          { label: "View All Scans", icon: FileImage, path: "/admin/scans", color: "bg-purple-50 text-purple-600 border-purple-100" },
-          { label: "AI Analysis", icon: Activity, path: "/admin/analysis", color: "bg-[#2EC4A5]/10 text-[#2EC4A5] border-[#2EC4A5]/20" },
-          { label: "Statistics", icon: TrendingUp, path: "/admin/dashboard", color: "bg-amber-50 text-amber-600 border-amber-100" },
-        ].map(item => (
-          <Link key={item.path} href={item.path} className={`flex items-center gap-3 p-4 rounded-2xl border ${item.color} active:scale-95 transition-transform`}>
-            <item.icon className="w-5 h-5" />
-            <span className="font-semibold text-sm">{item.label}</span>
-          </Link>
-        ))}
       </div>
     </motion.div>
   );
@@ -155,7 +117,7 @@ export function AdminUsers() {
   const users = (data?.users || []).filter(u => filter === "all" || u.role === filter);
 
   return (
-    <div className="p-6">
+    <div className="space-y-5">
       <h1 className="text-2xl font-bold text-slate-900 mb-5">All Users</h1>
 
       {/* Filter tabs */}
@@ -202,7 +164,7 @@ export function AdminScans() {
   const scans = data?.scans || [];
 
   return (
-    <div className="p-6">
+    <div className="space-y-5">
       <div className="flex justify-between items-center mb-5">
         <h1 className="text-2xl font-bold text-slate-900">All Scans</h1>
         <span className="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-full">{scans.length} total</span>
