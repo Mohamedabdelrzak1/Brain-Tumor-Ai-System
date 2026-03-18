@@ -7,8 +7,8 @@ import { AuthProvider, RoleGuard } from "@/lib/auth";
 // Import pages
 import { Splash, Login, Register, ForgotPassword, VerifyCode, ResetPassword } from "@/pages/auth";
 import { StudentLayout, StudentDashboard, StudentUpload, StudentHistory, StudentResult, StudentProfile } from "@/pages/student";
-import { DoctorLayout, DoctorDashboard, DoctorScanDetail } from "@/pages/doctor";
-import { AdminLayout, AdminDashboard, AdminUsers } from "@/pages/admin";
+import { DoctorLayout, DoctorDashboard, DoctorScans, DoctorScanDetail, DoctorAnalysis, DoctorProfile } from "@/pages/doctor";
+import { AdminLayout, AdminDashboard, AdminUsers, AdminScans, AdminAnalysis } from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -37,8 +37,10 @@ function DoctorApp() {
       <DoctorLayout>
         <Switch>
           <Route path="/doctor/dashboard" component={DoctorDashboard} />
-          <Route path="/doctor/patients" component={DoctorDashboard} /> {/* Mock routing to dash for now */}
-          <Route path="/doctor/scans/:id" component={DoctorScanDetail} />
+          <Route path="/doctor/scans" component={DoctorScans} />
+          <Route path="/doctor/scan/:id" component={DoctorScanDetail} />
+          <Route path="/doctor/analysis" component={DoctorAnalysis} />
+          <Route path="/doctor/profile" component={DoctorProfile} />
           <Route component={NotFound} />
         </Switch>
       </DoctorLayout>
@@ -53,8 +55,8 @@ function AdminApp() {
         <Switch>
           <Route path="/admin/dashboard" component={AdminDashboard} />
           <Route path="/admin/users" component={AdminUsers} />
-          <Route path="/admin/scans" component={() => <div className="text-white p-8">Scans Log Route</div>} />
-          <Route path="/admin/analysis" component={() => <div className="text-white p-8">Analytics Route</div>} />
+          <Route path="/admin/scans" component={AdminScans} />
+          <Route path="/admin/analysis" component={AdminAnalysis} />
           <Route component={NotFound} />
         </Switch>
       </AdminLayout>
