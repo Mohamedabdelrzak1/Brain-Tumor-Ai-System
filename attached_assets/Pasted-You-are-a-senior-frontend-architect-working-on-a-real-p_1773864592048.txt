@@ -1,0 +1,279 @@
+You are a senior frontend architect working on a real production-grade healthcare system.
+
+Your task is to build a COMPLETE React.js application using Create React App (NOT Vite, NOT Next.js) for a Brain Tumor Detection System.
+
+This is NOT a demo. This must be structured like a scalable enterprise application.
+
+====================================
+🚨 STRICT RULES (DO NOT BREAK)
+==============================
+
+* Use Create React App only
+* Use JavaScript (no TypeScript)
+* Use functional components only
+* Use clean architecture (separation of concerns)
+* No inline messy logic
+* No duplicated code
+* Every feature must be reusable
+
+====================================
+🏗️ ARCHITECTURE (VERY IMPORTANT)
+=================================
+
+Follow this exact structure:
+
+src/
+├── app/
+│   ├── store.js (global state logic if needed)
+│
+├── assets/
+│   ├── images/
+│   ├── icons/
+│
+├── components/
+│   ├── ui/
+│   │   ├── Button.jsx
+│   │   ├── Card.jsx
+│   │   ├── Badge.jsx
+│   │   ├── Input.jsx
+│   │   ├── Loader.jsx
+│   │
+│   ├── layout/
+│   │   ├── Sidebar.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── BottomNav.jsx
+│   │
+│   ├── shared/
+│   │   ├── ProtectedRoute.jsx
+│   │   ├── RoleGuard.jsx
+│
+├── pages/
+│   ├── auth/
+│   │   ├── Login.jsx
+│   │
+│   ├── admin/
+│   │   ├── Dashboard.jsx
+│   │   ├── Users.jsx
+│   │   ├── Scans.jsx
+│   │   ├── Analysis.jsx
+│
+│   ├── doctor/
+│   │   ├── Dashboard.jsx
+│   │   ├── Patients.jsx
+│   │   ├── ScanDetails.jsx
+│   │
+│   ├── student/
+│   │   ├── Dashboard.jsx
+│   │   ├── UploadScan.jsx
+│   │   ├── History.jsx
+│   │   ├── Result.jsx
+│
+├── services/
+│   ├── api.js
+│   ├── authService.js
+│   ├── scanService.js
+│   ├── analysisService.js
+│   ├── notificationService.js
+│
+├── context/
+│   ├── AuthContext.jsx
+│   ├── AppContext.jsx
+│
+├── hooks/
+│   ├── useAuth.js
+│   ├── useFetch.js
+│
+├── routes/
+│   ├── AppRoutes.jsx
+│   ├── routeConfig.js
+│
+├── layouts/
+│   ├── AdminLayout.jsx
+│   ├── DoctorLayout.jsx
+│   ├── StudentLayout.jsx
+│
+├── utils/
+│   ├── decodeToken.js
+│   ├── constants.js
+│   ├── helpers.js
+│
+├── App.js
+├── index.js
+
+====================================
+🔐 AUTH SYSTEM (DETAILED)
+=========================
+
+* Login API → returns JWT
+
+* Decode JWT to extract:
+
+  * userId
+  * role
+
+* Store:
+
+  * token
+  * role
+  * userId
+    in localStorage
+
+* Create AuthContext:
+
+  * user
+  * login()
+  * logout()
+  * isAuthenticated()
+
+* Auto logout if token expired
+
+====================================
+🛡️ ROUTING SYSTEM (STRICT)
+===========================
+
+* Use React Router v6
+* Create:
+
+  * ProtectedRoute
+  * RoleGuard
+
+Rules:
+
+* If not logged in → redirect to /login
+* If role mismatch → redirect to unauthorized page
+
+====================================
+🎨 ROLE-BASED LAYOUTS (CRITICAL)
+================================
+
+ADMIN:
+
+* Dark sidebar
+* Top navbar
+* Grid analytics
+* Tables
+
+DOCTOR:
+
+* Light UI
+* Patient cards
+* Focus on medical data
+
+STUDENT:
+
+* Mobile-first UI
+* Bottom navigation
+* Simple UX
+
+====================================
+📡 API LAYER (PROFESSIONAL)
+===========================
+
+Create Axios instance:
+
+* baseURL
+* interceptors
+* attach JWT
+* global error handling
+
+Each service must be separate:
+
+* authService.login()
+* scanService.uploadScan()
+* analysisService.runAnalysis()
+* etc...
+
+====================================
+🧠 STATE MANAGEMENT
+===================
+
+* AuthContext → authentication
+* AppContext → global UI (loading, errors)
+* Custom hooks for logic reuse
+
+====================================
+📂 FEATURE IMPLEMENTATION (DETAILED)
+====================================
+
+UPLOAD SCAN:
+
+* File input
+* Preview image
+* Upload via FormData
+* Show loading
+
+SCAN HISTORY:
+
+* List scans
+* Show status
+* Click → details
+
+RESULT PAGE:
+
+* Show:
+
+  * tumor type
+  * confidence %
+  * risk level
+* Use colored badges
+
+DOCTOR NOTES:
+
+* Add note
+* Display notes list
+
+====================================
+🎯 UI COMPONENTS (REUSABLE)
+===========================
+
+* Button (variants: primary, danger)
+* Card (shadow, rounded)
+* Badge (color based on status)
+* Input (form-ready)
+* Loader (spinner)
+
+====================================
+📊 DASHBOARD
+============
+
+ADMIN:
+
+* Total scans
+* Total users
+* Tumor stats
+
+DOCTOR:
+
+* Assigned scans
+* Critical cases
+
+STUDENT:
+
+* My scans
+* Recent results
+
+====================================
+⚡ UX FEATURES
+=============
+
+* Toast notifications
+* Skeleton loading
+* Error states
+* Empty states
+* Smooth transitions
+
+====================================
+🔥 FINAL OUTPUT
+===============
+
+You must:
+
+* Generate FULL working code
+* Explain each step briefly
+* Start from project creation
+* Then build everything step-by-step
+* No skipping
+* No pseudo code
+* No placeholders
+
+This must look like a real SaaS product.

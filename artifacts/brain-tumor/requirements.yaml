@@ -1,0 +1,23 @@
+packages:
+  "framer-motion": "For page transitions, bottom nav animations, and splash screens"
+  "recharts": "Admin dashboard analytics and statistics charts"
+  "react-hook-form": "Form state management"
+  "@hookform/resolvers": "Zod validation integration"
+  "zod": "Schema validation for forms"
+  "date-fns": "Human-readable date formatting"
+  "lucide-react": "Icons for UI"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility function to efficiently merge Tailwind CSS classes"
+
+images:
+  - path: "artifacts/brain-tumor/public/images/splash-brain.png"
+    description: "A highly premium, abstract, futuristic 3D neural network brain glowing with bright teal and cyan energy against a clean pure white background. Medical, AI technology, sleek, minimalistic."
+    aspect_ratio: "1:1"
+  - path: "artifacts/brain-tumor/public/images/brain-scan-placeholder.png"
+    description: "A clean, clinical MRI scan of a human brain in grayscale with a subtle teal analytical overlay grid, highly professional."
+    aspect_ratio: "1:1"
+
+notes:
+  - The API client is pre-generated in @workspace/api-client-react
+  - Authentication tokens will be stored in localStorage
+  - All mock users (admin, doctor, student) are assumed to be pre-seeded in the database

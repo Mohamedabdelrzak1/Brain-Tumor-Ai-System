@@ -1,0 +1,101 @@
+import { Switch, Route, Router as WouterRouter } from "wouter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider, RoleGuard } from "@/lib/auth";
+
+// Import pages
+import { Splash, Login, Register, ForgotPassword, VerifyCode, ResetPassword } from "@/pages/auth";
+import { StudentLayout, StudentDashboard, StudentUpload, StudentHistory, StudentResult, StudentProfile } from "@/pages/student";
+import { DoctorLayout, DoctorDashboard, DoctorScanDetail } from "@/pages/doctor";
+import { AdminLayout, AdminDashboard, AdminUsers } from "@/pages/admin";
+import NotFound from "@/pages/not-found";
+
+const queryClient = new QueryClient();
+
+// Routers for different roles to wrap layouts
+function StudentApp() {
+  return (
+    <RoleGuard allowedRoles={["student"]}>
+      <StudentLayout>
+        <Switch>
+          <Route path="/student/dashboard" component={StudentDashboard} />
+          <Route path="/student/upload" component={StudentUpload} />
+          <Route path="/student/history" component={StudentHistory} />
+          <Route path="/student/result/:id" component={StudentResult} />
+          <Route path="/student/profile" component={StudentProfile} />
+          <Route component={NotFound} />
+        </Switch>
+      </StudentLayout>
+    </RoleGuard>
+  );
+}
+
+function DoctorApp() {
+  return (
+    <RoleGuard allowedRoles={["doctor"]}>
+      <DoctorLayout>
+        <Switch>
+          <Route path="/doctor/dashboard" component={DoctorDashboard} />
+          <Route path="/doctor/patients" component={DoctorDashboard} /> {/* Mock routing to dash for now */}
+          <Route path="/doctor/scans/:id" component={DoctorScanDetail} />
+          <Route component={NotFound} />
+        </Switch>
+      </DoctorLayout>
+    </RoleGuard>
+  );
+}
+
+function AdminApp() {
+  return (
+    <RoleGuard allowedRoles={["admin"]}>
+      <AdminLayout>
+        <Switch>
+          <Route path="/admin/dashboard" component={AdminDashboard} />
+          <Route path="/admin/users" component={AdminUsers} />
+          <Route path="/admin/scans" component={() => <div className="text-white p-8">Scans Log Route</div>} />
+          <Route path="/admin/analysis" component={() => <div className="text-white p-8">Analytics Route</div>} />
+          <Route component={NotFound} />
+        </Switch>
+      </AdminLayout>
+    </RoleGuard>
+  );
+}
+
+function Router() {
+  return (
+    <Switch>
+      {/* Public Auth Routes */}
+      <Route path="/" component={Splash} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/verify-code" component={VerifyCode} />
+      <Route path="/reset-password" component={ResetPassword} />
+      
+      {/* Protected Routes nested by role */}
+      <Route path="/student/*" component={StudentApp} />
+      <Route path="/doctor/*" component={DoctorApp} />
+      <Route path="/admin/*" component={AdminApp} />
+      
+      <Route component={NotFound} />
+    </Switch>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
+        </WouterRouter>
+        <Toaster />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Brain Tumor Detection System"
+version = "1.0.0"
+id = "artifacts/brain-tumor"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 24484
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/brain-tumor run dev"
+
+[services.env]
+PORT = "24484"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/brain-tumor", "run", "build"]
+publicDir = "artifacts/brain-tumor/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
