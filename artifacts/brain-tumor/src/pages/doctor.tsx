@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
-import { motion } from "framer-motion";
-import { Home, FileImage, Activity, User, ChevronRight, CheckCircle, AlertTriangle, FileText, Send } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Home, FileImage, Activity, User, ChevronRight, CheckCircle, AlertTriangle, FileText, Send, Key, Bell, Lock, Info, HelpCircle, MessageCircle, LogOut, Edit2, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import {
   useGetScans,
@@ -320,24 +320,140 @@ export function DoctorScanDetail() {
 }
 
 // ─── Profile ──────────────────────────────────────────────────────────────────
+function DoctorChangePwSheet({ onClose }: { onClose: () => void }) {
+  const { toast } = useToast();
+  const [form, setForm] = useState({ current: "", newPw: "", confirm: "" });
+  const [show, setShow] = useState({ current: false, newPw: false, confirm: false });
+  const [loading, setLoading] = useState(false);
+
+  const handleUpdate = async () => {
+    if (!form.current || !form.newPw || !form.confirm) { toast({ title: "Fill all fields", variant: "destructive" }); return; }
+    if (form.newPw !== form.confirm) { toast({ title: "Passwords don't match", variant: "destructive" }); return; }
+    setLoading(true);
+    await new Promise(r => setTimeout(r, 1200));
+    toast({ title: "Password updated successfully!" });
+    setLoading(false);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", damping: 30, stiffness: 400 }}
+        className="relative w-full max-w-lg bg-white rounded-t-3xl px-6 pt-4 pb-10" onClick={e => e.stopPropagation()}>
+        <div className="w-10 h-1 bg-slate-300 rounded-full mx-auto mb-5" />
+        <h3 className="font-bold text-slate-900 text-xl mb-6">Change your Password</h3>
+        <div className="space-y-4">
+          {[
+            { label: "Current Password", key: "current", show: show.current, toggle: () => setShow(p => ({ ...p, current: !p.current })) },
+            { label: "New Password", key: "newPw", show: show.newPw, toggle: () => setShow(p => ({ ...p, newPw: !p.newPw })) },
+            { label: "Confirm New Password", key: "confirm", show: show.confirm, toggle: () => setShow(p => ({ ...p, confirm: !p.confirm })) },
+          ].map(f => (
+            <div key={f.key} className="relative">
+              <input type={f.show ? "text" : "password"} placeholder={f.label} value={(form as any)[f.key]}
+                onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+                className="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm placeholder:text-slate-400 focus:outline-none focus:border-[#2EC4A5] pr-12" />
+              <button type="button" onClick={f.toggle} className="absolute right-4 top-4">
+                {f.show ? <EyeOff className="w-5 h-5 text-slate-400" /> : <Eye className="w-5 h-5 text-slate-400" />}
+              </button>
+            </div>
+          ))}
+          <button onClick={handleUpdate} disabled={loading}
+            className="w-full bg-[#2EC4A5] hover:bg-[#28b096] text-white font-bold py-4 rounded-2xl mt-2 disabled:opacity-60 shadow-lg shadow-[#2EC4A5]/20 transition-colors">
+            {loading ? "Updating..." : "Update"}
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export function DoctorProfile() {
   const { user, logout } = useAuth();
+  const [showPwSheet, setShowPwSheet] = useState(false);
+  const [notifEnabled, setNotifEnabled] = useState(true);
+
   return (
-    <div className="space-y-5">
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Profile</h1>
-      <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col items-center mb-6">
-        <div className="w-24 h-24 bg-[#2EC4A5]/10 rounded-full flex items-center justify-center mb-4 text-[#2EC4A5] text-3xl font-bold">
-          {user?.fullName?.charAt(0) || "D"}
-        </div>
-        <h2 className="text-xl font-bold text-slate-900">Dr. {user?.fullName}</h2>
-        <p className="text-slate-500 text-sm">{user?.email}</p>
-        <div className="mt-3 bg-[#2EC4A5]/10 text-[#2EC4A5] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
-          Doctor
+    <div className="space-y-5 pb-8">
+      <h1 className="text-2xl font-bold text-slate-900">Profile</h1>
+
+      {/* User card */}
+      <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+            {user?.fullName?.charAt(0)}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h2 className="font-bold text-slate-900 text-lg truncate">Dr. {user?.fullName}</h2>
+            <p className="text-slate-400 text-sm truncate">{user?.email}</p>
+            {user?.organization && <p className="text-xs text-slate-300 mt-0.5 truncate">{user.organization}</p>}
+          </div>
+          <button className="p-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+            <Edit2 className="w-4 h-4 text-slate-600" />
+          </button>
         </div>
       </div>
-      <button onClick={logout} className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-4 rounded-2xl transition-colors">
-        Log Out
+
+      {/* Account */}
+      <div>
+        <p className="text-sm font-bold text-slate-900 mb-0.5 px-1">Account</p>
+        <p className="text-xs text-slate-400 mb-3 px-1">Update info for better care</p>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden divide-y divide-slate-50">
+          <button onClick={() => setShowPwSheet(true)}
+            className="w-full flex items-center gap-4 px-4 py-4 hover:bg-slate-50 transition-colors">
+            <div className="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0"><Key className="w-4 h-4 text-slate-500" /></div>
+            <span className="flex-1 text-left text-slate-800 font-medium text-sm">Change Password</span>
+            <ChevronRight className="w-4 h-4 text-slate-300" />
+          </button>
+          <div className="w-full flex items-center gap-4 px-4 py-4 hover:bg-slate-50 transition-colors">
+            <div className="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0"><Bell className="w-4 h-4 text-slate-500" /></div>
+            <span className="flex-1 text-left text-slate-800 font-medium text-sm">Notifications Settings</span>
+            <button onClick={() => setNotifEnabled(!notifEnabled)}
+              className={`w-12 h-6 rounded-full transition-colors relative ${notifEnabled ? "bg-[#2EC4A5]" : "bg-slate-300"}`}>
+              <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${notifEnabled ? "translate-x-7" : "translate-x-1"}`} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* App */}
+      <div>
+        <p className="text-sm font-bold text-slate-900 mb-0.5 px-1">App</p>
+        <p className="text-xs text-slate-400 mb-3 px-1">Protecting your data with care</p>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden divide-y divide-slate-50">
+          {[{ icon: Lock, label: "Data & Privacy" }, { icon: Info, label: "About Brain Tumor" }].map(item => (
+            <button key={item.label} className="w-full flex items-center gap-4 px-4 py-4 hover:bg-slate-50 transition-colors">
+              <div className="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0"><item.icon className="w-4 h-4 text-slate-500" /></div>
+              <span className="flex-1 text-left text-slate-800 font-medium text-sm">{item.label}</span>
+              <ChevronRight className="w-4 h-4 text-slate-300" />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Support */}
+      <div>
+        <p className="text-sm font-bold text-slate-900 mb-0.5 px-1">Support</p>
+        <p className="text-xs text-slate-400 mb-3 px-1">We answer about your needs</p>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden divide-y divide-slate-50">
+          {[{ icon: HelpCircle, label: "FAQ" }, { icon: MessageCircle, label: "Contact Support" }].map(item => (
+            <button key={item.label} className="w-full flex items-center gap-4 px-4 py-4 hover:bg-slate-50 transition-colors">
+              <div className="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0"><item.icon className="w-4 h-4 text-slate-500" /></div>
+              <span className="flex-1 text-left text-slate-800 font-medium text-sm">{item.label}</span>
+              <ChevronRight className="w-4 h-4 text-slate-300" />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <button onClick={logout}
+        className="w-full flex items-center justify-center gap-2 border-2 border-red-100 text-red-500 hover:bg-red-50 font-semibold py-4 rounded-2xl transition-colors">
+        <LogOut className="w-5 h-5" /> Log Out
       </button>
+
+      <AnimatePresence>
+        {showPwSheet && <DoctorChangePwSheet onClose={() => setShowPwSheet(false)} />}
+      </AnimatePresence>
     </div>
   );
 }

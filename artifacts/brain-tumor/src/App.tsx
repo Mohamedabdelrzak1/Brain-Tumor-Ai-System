@@ -6,7 +6,7 @@ import { AuthProvider, RoleGuard } from "@/lib/auth";
 
 // Import pages
 import { Splash, Login, Register, ForgotPassword, VerifyCode, ResetPassword } from "@/pages/auth";
-import { StudentLayout, StudentDashboard, StudentUpload, StudentHistory, StudentResult, StudentProfile } from "@/pages/student";
+import { StudentLayout, StudentDashboard, StudentUpload, StudentHistory, StudentResult, StudentProfile, StudentNotifications, StudentDataPrivacy } from "@/pages/student";
 import { DoctorLayout, DoctorDashboard, DoctorScans, DoctorScanDetail, DoctorAnalysis, DoctorProfile } from "@/pages/doctor";
 import { AdminLayout, AdminDashboard, AdminUsers, AdminScans, AdminAnalysis } from "@/pages/admin";
 import NotFound from "@/pages/not-found";
@@ -24,6 +24,8 @@ function StudentApp() {
           <Route path="/student/history" component={StudentHistory} />
           <Route path="/student/result/:id" component={StudentResult} />
           <Route path="/student/profile" component={StudentProfile} />
+          <Route path="/student/notifications" component={StudentNotifications} />
+          <Route path="/student/data-privacy" component={StudentDataPrivacy} />
           <Route component={NotFound} />
         </Switch>
       </StudentLayout>
