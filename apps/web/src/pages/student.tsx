@@ -162,7 +162,7 @@ const [showUpload, setShowUpload] = useState(false);
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6 p-6"
+      className="space-y-6"
     >
       {/* ================= HEADER ================= */}
       <div>
@@ -878,8 +878,8 @@ const analysisMap = useMemo(() => {
   },
 });
 
- return (
-  <div className="p-6 space-y-8">
+  return (
+   <div className="space-y-8">
 
    {/* 🔥 HEADER */}
 {!showUpload && (
@@ -1696,7 +1696,7 @@ const getStyles = (type: string, confidence: number) => {
   });
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
 {/* 🔥 HEADER */}
 <div className="flex items-center gap-4">
 
@@ -2484,7 +2484,7 @@ const notifications = Array.isArray(data) ? data : [];
   const filtered = tab === "unread" ? unread : read;
 const totalPages = Math.ceil((data?.totalCount || 0) / 10);
   return (
-    <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-6">
+    <div className="w-full max-w-4xl mx-auto space-y-6">
 
       {/* HEADER */}
       <div className="flex items-center gap-3">

@@ -170,7 +170,7 @@ export function DoctorDashboard() {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-6 p-6"
+      className="space-y-6"
     >
       {/* ================= HEADER ================= */}
       <div>
@@ -727,8 +727,8 @@ const analysisMap = new Map(
   },
 });
 
- return (
-  <div className="p-6 space-y-8">
+  return (
+   <div className="space-y-8">
 
    {/* 🔥 HEADER */}
 {!showUpload && (
@@ -1193,7 +1193,7 @@ export function DoctorScanDetail() {
  
   return (
     <>
-      <div className="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen p-6 md:p-10 space-y-10">
+      <div className="bg-gradient-to-br from-slate-50 to-slate-100 min-h-[calc(100vh-4rem)] p-4 sm:p-6 md:p-8 space-y-6 lg:space-y-10">
 
         {/* 🔝 HEADER */}
         <div className="flex justify-between items-center">
@@ -1560,7 +1560,7 @@ const getStyles = (type: string, confidence: number) => {
   });
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
 {/* 🔥 HEADER */}
 <div className="flex items-center gap-4">
 
