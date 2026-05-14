@@ -3,7 +3,7 @@ import { Link, useLocation, useRoute } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  Home, Upload as UploadIcon, History as HistoryIcon, User,
+  Home, History as HistoryIcon, User,
   Settings, ChevronRight, FileImage, AlertTriangle, CheckCircle,
   ShieldAlert, Key, Bell, Lock, Info, HelpCircle, MessageCircle,
   LogOut, Edit2, X, Eye, EyeOff, ArrowLeft,
@@ -26,8 +26,8 @@ import {
   ChevronDown,
   Sparkles,
   Send,
-  Upload,
   Check,
+  Upload,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
@@ -820,6 +820,12 @@ const { toast } = useToast();
  const analyzeMutation = useMutation({
   mutationFn: runAnalysis7138,
 
+  onMutate: (scanId) => {
+    setAnalyzingId(scanId);
+  },
+  onSettled: () => {
+    setAnalyzingId(null);
+  },
   onSuccess: async (data, scanId) => {
     toast({
       title: "✔ Analysis Completed",
@@ -2023,18 +2029,6 @@ export default function AnalysisDetailsStudent() {
   //////////////////////////////////////////////////////////
 // ➕ ADD NOTE (REAL TIME)
 //////////////////////////////////////////////////////////
-
- 
-  //////////////////////////////////////////////////////////
-  // LOADING
-  //////////////////////////////////////////////////////////
-  if (isLoading) {
-    return <div className="p-10 text-center">Loading...</div>;
-  }
-
-  if (!analysis) {
-    return <div className="p-10 text-center text-red-500">No data</div>;
-  }
 
   //////////////////////////////////////////////////////////
   // UI
@@ -3463,4 +3457,3 @@ export function SupportPageStudent() {
     </div>
   );
 }
-
