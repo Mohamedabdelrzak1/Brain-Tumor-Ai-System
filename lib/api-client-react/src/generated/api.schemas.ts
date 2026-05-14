@@ -34,14 +34,12 @@ export const RegisterRequestRole = {
 } as const;
 
 export interface RegisterRequest {
-  fullName: string;
+  displayName: string;
   email: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
-  organization?: string;
-  role?: RegisterRequestRole;
 }
-
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
 export const UserRole = {

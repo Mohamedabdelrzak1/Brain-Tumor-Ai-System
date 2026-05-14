@@ -7,11 +7,10 @@
  */
 import type { RegisterRequestRole } from "./registerRequestRole";
 
-export interface RegisterRequest {
-  fullName: string;
+type RegisterRequest = {
+  displayName: string;
   email: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
-  organization?: string;
-  role?: RegisterRequestRole;
-}
+};
