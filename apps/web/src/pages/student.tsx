@@ -42,7 +42,6 @@ import { changePassword, deleteScan7138, getAnalysisDetails7138, getMyAnalysis71
   markNotificationAsRead,
   deleteNotification,
   markAllNotificationsAsRead,} from "@/lib/api7138";
-import { useNavigate, useParams  } from "react-router-dom";
 import {
   ResponsiveContainer,
  
@@ -3464,5 +3463,4 @@ export function SupportPageStudent() {
     </div>
   );
 }
-
 

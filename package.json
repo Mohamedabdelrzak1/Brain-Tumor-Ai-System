@@ -16,7 +16,5 @@
     "typescript": "~5.9.2"
   },
   "packageManager": "pnpm@9.0.0",
-  "dependencies": {
-    "react-router-dom": "^7.13.2"
-  }
+  "dependencies": {}
 }
