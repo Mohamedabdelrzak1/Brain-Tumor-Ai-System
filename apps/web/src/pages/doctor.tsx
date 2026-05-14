@@ -683,22 +683,13 @@ const { toast } = useToast();
  const analyzeMutation = useMutation({
   mutationFn: runAnalysis7138,
 
-  onMutate: (scanId) => {
-    setAnalyzingId(scanId);
-  },
-  onSettled: () => {
-    setAnalyzingId(null);
-  },
-  onSuccess: async (data, scanId) => {
+  onSuccess: (data, scanId) => {
     toast({
       title: "✔ Analysis Completed",
       description: "Result is ready",
       className:
         "bg-white border border-green-200 shadow-xl rounded-2xl",
     });
-
-    await qc.invalidateQueries({ queryKey: ["my-analysis"] });
-    await qc.invalidateQueries({ queryKey: ["scans"] });
 
     // 💣 افتح النتيجة الجديدة
     if (data?.id) {
@@ -718,11 +709,9 @@ const { data: analysisData } = useQuery({
   queryKey: ["my-analysis"],
   queryFn: getMyAnalysis7138, // هنكتبها دلوقتي
 });
-  const analysisMap = useMemo(() => {
-    return new Map(
-      (analysisData || []).map((a: any) => [a.scanId, a])
-    );
-  }, [analysisData]);
+const analysisMap = new Map(
+  (analysisData || []).map((a: any) => [a.scanId, a])
+);
 
   // 📤 UPLOAD
  const uploadMutation = useMutation({
