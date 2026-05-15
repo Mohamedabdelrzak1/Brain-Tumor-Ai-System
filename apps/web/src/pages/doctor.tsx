@@ -14,7 +14,12 @@ Icon,
 Send,
 ArrowRight,
 Upload,
-Check} from "lucide-react";
+Check,
+LayoutDashboard,
+Cloud,
+BadgeCheck,
+UserCheck,
+DatabaseBackup} from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -3576,150 +3581,951 @@ export function BackToProfile() {
 }
 export function PrivacyPage() {
   const rules = [
-    "End-to-end encryption for all scans",
-    "No third-party data sharing",
-    "Secure cloud storage",
-    "Role-based access control",
-    "HIPAA compliance standards",
-    "Daily security audits",
-    "AI data anonymization",
-    "Encrypted backups",
+    {
+      title: "End-to-End Encryption",
+      desc: "All MRI scans and patient records are encrypted during upload, transfer, and storage.",
+      icon: ShieldCheck,
+    },
+    {
+      title: "Secure Cloud Storage",
+      desc: "Medical imaging data is stored using enterprise-grade secure cloud infrastructure.",
+      icon: Cloud,
+    },
+    {
+      title: "HIPAA Compliance",
+      desc: "The platform follows strict healthcare privacy and compliance standards.",
+      icon: BadgeCheck,
+    },
+    {
+      title: "Role-Based Access",
+      desc: "Doctors, admins, and students only access authorized data and tools.",
+      icon: UserCheck,
+    },
+    {
+      title: "AI Data Protection",
+      desc: "Sensitive patient information is anonymized before AI model processing.",
+      icon: EyeOff,
+    },
+    {
+      title: "Encrypted Backups",
+      desc: "Automated encrypted backups ensure medical records remain protected and recoverable.",
+      icon: DatabaseBackup,
+    },
+    {
+      title: "24/7 Security Monitoring",
+      desc: "Continuous monitoring systems detect and prevent suspicious activity in real time.",
+      icon: ScanSearch,
+    },
+    {
+      title: "No Third-Party Sharing",
+      desc: "BrainAI never shares patient or medical data with external organizations.",
+      icon: Lock,
+    },
   ];
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-8">
-<BackToProfile />
-      {/* HERO */}
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-[#2EC4A5]/10 flex items-center justify-center">
-          <ShieldCheck className="w-6 h-6 text-[#2EC4A5]" />
-        </div>
- 
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white">
+      
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-400/10 blur-[120px] rounded-full pointer-events-none" />
 
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">
-            Data & Privacy
-          </h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Medical-grade protection for your data
-          </p>
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        
+        {/* Back Button */}
+        <div className="mb-6">
+          <BackToProfile />
         </div>
-      </div>
 
-      {/* GRID */}
-      <div className="grid md:grid-cols-2 gap-5">
-        {rules.map((rule, i) => (
+        {/* ───────── HERO SECTION ───────── */}
+        <div className="text-center mb-16">
+          
+          {/* Badge */}
           <div
-            key={i}
-            className="group bg-white border border-slate-100 rounded-2xl p-5 shadow-sm 
-            hover:shadow-md transition-all hover:-translate-y-1"
+            className="
+              inline-flex items-center gap-2
+              px-4 py-2
+              rounded-full
+              bg-emerald-50
+              border border-emerald-100
+              text-emerald-600
+              text-sm font-semibold
+              shadow-sm
+            "
           >
-            <div className="flex items-center gap-4">
+            <ShieldCheck size={16} />
+            Healthcare Security Standards
+          </div>
 
-              {/* ICON */}
-              <div className="w-11 h-11 rounded-xl bg-[#2EC4A5]/10 flex items-center justify-center">
-                <Lock className="w-5 h-5 text-[#2EC4A5]" />
+          {/* Main Icon */}
+          <div className="flex justify-center mt-8">
+            <div className="relative group">
+              
+              {/* Glow */}
+              <div className="absolute inset-0 bg-emerald-400/30 blur-3xl rounded-full scale-125 opacity-70 group-hover:opacity-100 transition-all duration-700" />
+
+              {/* Icon Container */}
+              <div
+                className="
+                  relative w-28 h-28 rounded-[32px]
+                  bg-gradient-to-br
+                  from-emerald-400
+                  via-teal-500
+                  to-emerald-600
+                  flex items-center justify-center
+                  shadow-[0_20px_60px_rgba(16,185,129,0.35)]
+                "
+              >
+                <ShieldCheck
+                  size={54}
+                  className="text-white drop-shadow-md"
+                />
               </div>
-
-              <p className="text-sm font-medium text-slate-700">
-                {rule}
-              </p>
-
             </div>
           </div>
-        ))}
+
+          {/* Title */}
+          <h1
+            className="
+              mt-8
+              text-5xl sm:text-6xl
+              font-black
+              tracking-[-0.05em]
+              text-slate-900
+            "
+          >
+            Data &
+            <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+              {" "}Privacy
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            className="
+              mt-4
+              text-lg sm:text-xl
+              font-medium
+              text-slate-500
+            "
+          >
+            Enterprise-Level Security for Medical AI Systems
+          </p>
+
+          {/* Description */}
+          <p
+            className="
+              mt-6
+              max-w-3xl mx-auto
+              text-base sm:text-lg
+              leading-8
+              text-slate-500
+            "
+          >
+            BrainAI protects MRI scans, patient information, and healthcare
+            records using advanced encryption technologies, secure cloud
+            infrastructure, and medical-grade privacy standards.
+          </p>
+        </div>
+
+        {/* ───────── SECURITY CARDS ───────── */}
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+          {rules.map((rule, i) => {
+            const Icon = rule.icon;
+
+            return (
+              <div
+                key={i}
+                className="
+                  group relative overflow-hidden
+                  rounded-3xl
+                  border border-slate-200/70
+                  bg-white/90
+                  p-6
+                  shadow-sm
+                  transition-all duration-500
+                  hover:-translate-y-1
+                  hover:shadow-[0_20px_60px_rgba(16,185,129,0.08)]
+                  hover:border-emerald-100
+                "
+              >
+                {/* Hover Glow */}
+                <div
+                  className="
+                    absolute inset-0
+                    bg-gradient-to-br
+                    from-emerald-50/0
+                    via-emerald-50/40
+                    to-teal-50/0
+
+                    opacity-0
+                    group-hover:opacity-100
+
+                    transition-opacity duration-700
+                  "
+                />
+
+                {/* Icon */}
+                <div
+                  className="
+                    relative z-10
+                    w-14 h-14 rounded-2xl
+                    bg-gradient-to-br
+                    from-emerald-400
+                    to-teal-500
+                    flex items-center justify-center
+                    shadow-lg shadow-emerald-500/20
+                  "
+                >
+                  <Icon
+                    size={26}
+                    className="text-white"
+                  />
+                </div>
+
+                {/* Title */}
+                <h3
+                  className="
+                    relative z-10
+                    mt-5
+                    text-lg
+                    font-bold
+                    tracking-[-0.02em]
+                    text-slate-900
+                  "
+                >
+                  {rule.title}
+                </h3>
+
+                {/* Description */}
+                <p
+                  className="
+                    relative z-10
+                    mt-3
+                    text-sm leading-7
+                    text-slate-500
+                  "
+                >
+                  {rule.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ───────── SECURITY STATS ───────── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-14">
+          {[
+            { value: "256-bit", label: "Encrypted Storage" },
+            { value: "HIPAA", label: "Compliance" },
+            { value: "24/7", label: "Threat Monitoring" },
+            { value: "100%", label: "Secure Access" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="
+                rounded-3xl border border-slate-200/70
+                bg-white/90 backdrop-blur-xl
+                p-6 text-center
+                shadow-sm
+                hover:shadow-xl
+                transition-all duration-500
+                hover:-translate-y-1
+              "
+            >
+              <h3 className="text-3xl font-black text-slate-900">
+                {item.value}
+              </h3>
+
+              <p className="mt-2 text-sm text-slate-500">
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* ───────── CTA SECTION ───────── */}
+        <div
+          className="
+            relative overflow-hidden
+            rounded-[36px]
+            bg-gradient-to-r
+            from-emerald-500
+            via-teal-500
+            to-emerald-600
+
+            px-8 py-12
+            mt-14
+            text-center
+            shadow-[0_25px_80px_rgba(16,185,129,0.25)]
+          "
+        >
+          {/* Glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),transparent_60%)]" />
+
+          <div className="relative z-10">
+            <h2
+              className="
+                text-3xl sm:text-4xl
+                font-black
+                tracking-[-0.04em]
+                text-white
+              "
+            >
+              Secure AI Healthcare Experience
+            </h2>
+
+            <p
+              className="
+                mt-4
+                max-w-2xl mx-auto
+                text-white/80
+                text-base sm:text-lg
+                leading-8
+              "
+            >
+              BrainAI combines intelligent MRI analysis with enterprise-grade
+              privacy and healthcare security technologies.
+            </p>
+
+            <button
+              className="
+                mt-8
+                inline-flex items-center justify-center
+                px-7 py-3.5
+                rounded-2xl
+                bg-white
+                text-emerald-600
+                font-bold
+                shadow-xl
+                hover:scale-[1.03]
+                transition-all duration-300
+              "
+            >
+              Explore Security Features
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+
+
 export function AboutPage() {
   const features = [
-    "AI-powered tumor detection",
-    "High accuracy MRI analysis",
-    "Real-time scan processing",
-    "Advanced deep learning models",
-    "Doctor-friendly dashboard",
-    "Secure patient data handling",
+    {
+      title: "AI Tumor Detection",
+      desc: "Advanced deep learning models analyze MRI scans and detect tumor patterns with high precision.",
+      icon: Brain,
+    },
+    {
+      title: "Real-Time Analysis",
+      desc: "Instant scan processing with intelligent AI insights and fast diagnostic assistance.",
+      icon: Sparkles,
+    },
+    {
+      title: "Medical Accuracy",
+      desc: "Built with healthcare-focused AI pipelines optimized for medical imaging workflows.",
+      icon: ShieldCheck,
+    },
+    {
+      title: "Doctor Dashboard",
+      desc: "Clean modern interface designed for doctors, students, and healthcare professionals.",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Secure Data",
+      desc: "All MRI scans and patient records are securely encrypted and protected.",
+      icon: Lock,
+    },
+    {
+      title: "Smart Reporting",
+      desc: "Generate AI-powered reports and detailed scan summaries instantly.",
+      icon: FileText,
+    },
   ];
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-8">
-<BackToProfile />
-      {/* HERO */}
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-[#2EC4A5]/10 flex items-center justify-center">
-          <Brain className="w-6 h-6 text-[#2EC4A5]" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white">
+      
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-400/10 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        
+        {/* Back Button */}
+        <div className="mb-6">
+          <BackToProfile />
         </div>
 
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">
-            Brain Tumor AI
+        {/* ───────── HERO SECTION ───────── */}
+        <div className="text-center mb-16">
+          
+          {/* Badge */}
+          <div
+            className="
+              inline-flex items-center gap-2
+              px-4 py-2
+              rounded-full
+              bg-emerald-50
+              border border-emerald-100
+              text-emerald-600
+              text-sm font-semibold
+              shadow-sm
+            "
+          >
+            <Sparkles size={16} />
+            AI-Powered Medical Platform
+          </div>
+
+          {/* Logo */}
+          <div className="flex justify-center mt-8">
+            <div className="relative group">
+              
+              {/* Glow */}
+              <div className="absolute inset-0 bg-emerald-400/30 blur-3xl rounded-full scale-125 opacity-70 group-hover:opacity-100 transition-all duration-700" />
+
+              {/* Icon Box */}
+              <div
+                className="
+                  relative w-28 h-28 rounded-[32px]
+                  bg-gradient-to-br
+                  from-emerald-400
+                  via-teal-500
+                  to-emerald-600
+                  flex items-center justify-center
+                  shadow-[0_20px_60px_rgba(16,185,129,0.35)]
+                "
+              >
+                <Brain
+                  size={54}
+                  className="text-white drop-shadow-md"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h1
+            className="
+              mt-8
+              text-5xl sm:text-6xl
+              font-black
+              tracking-[-0.05em]
+              text-slate-900
+            "
+          >
+            Brain
+            <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+              AI
+            </span>
           </h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Intelligent MRI analysis powered by AI
+
+          {/* Subtitle */}
+          <p
+            className="
+              mt-4
+              text-lg sm:text-xl
+              font-medium
+              text-slate-500
+            "
+          >
+            Intelligent MRI Analysis Powered by Artificial Intelligence
+          </p>
+
+          {/* Description */}
+          <p
+            className="
+              mt-6
+              max-w-3xl mx-auto
+              text-base sm:text-lg
+              leading-8
+              text-slate-500
+            "
+          >
+            BrainAI is a modern medical AI platform designed to help doctors,
+            students, and healthcare professionals analyze MRI scans using
+            advanced deep learning technologies with speed, accuracy, and
+            security.
           </p>
         </div>
-      </div>
 
-      {/* FEATURES */}
-      <div className="grid md:grid-cols-2 gap-5">
-        {features.map((f, i) => (
-          <div
-            key={i}
-            className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition"
-          >
-            <p className="font-semibold text-slate-800 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#2EC4A5]" />
-              Feature #{i + 1}
+        {/* ───────── STATS ───────── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+          
+          {[
+            { value: "99%", label: "Detection Accuracy" },
+            { value: "24/7", label: "AI Availability" },
+            { value: "10K+", label: "MRI Scans" },
+            { value: "Real-Time", label: "Analysis Speed" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="
+                rounded-3xl border border-slate-200/70
+                bg-white/90 backdrop-blur-xl
+                p-6 text-center
+                shadow-sm
+                hover:shadow-xl
+                transition-all duration-500
+                hover:-translate-y-1
+              "
+            >
+              <h3 className="text-3xl font-black text-slate-900">
+                {item.value}
+              </h3>
+
+              <p className="mt-2 text-sm text-slate-500">
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* ───────── FEATURES ───────── */}
+        <div className="mb-14">
+          
+          {/* Section Header */}
+          <div className="text-center mb-10">
+            <h2
+              className="
+                text-3xl sm:text-4xl
+                font-black
+                tracking-[-0.04em]
+                text-slate-900
+              "
+            >
+              Platform Features
+            </h2>
+
+            <p className="mt-3 text-slate-500 max-w-2xl mx-auto">
+              Everything you need for intelligent MRI analysis and modern
+              healthcare workflows.
+            </p>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {features.map((f, i) => {
+              const Icon = f.icon;
+
+              return (
+                <div
+                  key={i}
+                  className="
+                    group relative overflow-hidden
+                    rounded-3xl
+                    border border-slate-200/70
+                    bg-white/90
+                    p-6
+                    shadow-sm
+                    transition-all duration-500
+                    hover:-translate-y-1
+                    hover:shadow-[0_20px_60px_rgba(16,185,129,0.08)]
+                    hover:border-emerald-100
+                  "
+                >
+                  {/* Hover Glow */}
+                  <div
+                    className="
+                      absolute inset-0
+                      bg-gradient-to-br
+                      from-emerald-50/0
+                      via-emerald-50/40
+                      to-teal-50/0
+
+                      opacity-0
+                      group-hover:opacity-100
+
+                      transition-opacity duration-700
+                    "
+                  />
+
+                  {/* Icon */}
+                  <div
+                    className="
+                      relative z-10
+                      w-14 h-14 rounded-2xl
+                      bg-gradient-to-br
+                      from-emerald-400
+                      to-teal-500
+                      flex items-center justify-center
+                      shadow-lg shadow-emerald-500/20
+                    "
+                  >
+                    <Icon
+                      size={26}
+                      className="text-white"
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <h3
+                    className="
+                      relative z-10
+                      mt-5
+                      text-xl
+                      font-bold
+                      tracking-[-0.02em]
+                      text-slate-900
+                    "
+                  >
+                    {f.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p
+                    className="
+                      relative z-10
+                      mt-3
+                      text-sm leading-7
+                      text-slate-500
+                    "
+                  >
+                    {f.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ───────── CTA ───────── */}
+        <div
+          className="
+            relative overflow-hidden
+            rounded-[36px]
+            bg-gradient-to-r
+            from-emerald-500
+            via-teal-500
+            to-emerald-600
+
+            px-8 py-12
+            text-center
+            shadow-[0_25px_80px_rgba(16,185,129,0.25)]
+          "
+        >
+          {/* Background Glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),transparent_60%)]" />
+
+          <div className="relative z-10">
+            <h2
+              className="
+                text-3xl sm:text-4xl
+                font-black
+                tracking-[-0.04em]
+                text-white
+              "
+            >
+              Transforming MRI Analysis with AI
+            </h2>
+
+            <p
+              className="
+                mt-4
+                max-w-2xl mx-auto
+                text-white/80
+                text-base sm:text-lg
+                leading-8
+              "
+            >
+              BrainAI combines modern AI technology with healthcare innovation
+              to deliver intelligent medical imaging solutions.
             </p>
 
-            <p className="text-sm text-slate-500 mt-2">{f}</p>
+     
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
 }
 
 export function FaqPage() {
-  const [open, setOpen] = useState<number | null>(null);
+  const [open, setOpen] = useState<number | null>(0);
 
-  const faqs = Array.from({ length: 6 }, (_, i) => ({
-    q: `How does the system work?`,
-    a: "The AI analyzes MRI scans and detects tumor patterns using deep learning.",
-  }));
+  const faqs = [
+    {
+      q: "How does BrainAI analyze MRI scans?",
+      a: "BrainAI uses advanced deep learning and medical imaging models to analyze MRI scans, detect abnormal tumor patterns, and generate intelligent diagnostic insights in real time.",
+    },
+    {
+      q: "Is BrainAI suitable for medical students?",
+      a: "Yes. BrainAI is designed for both healthcare professionals and medical students, providing educational insights, scan visualization, and AI-assisted learning.",
+    },
+    {
+      q: "How secure is patient data?",
+      a: "All patient records and MRI scans are protected using encrypted communication and secure cloud infrastructure following healthcare-grade security standards.",
+    },
+    {
+      q: "Can I access the system from mobile devices?",
+      a: "Absolutely. The platform is fully responsive and optimized for desktop, tablet, and mobile devices with smooth performance across all screen sizes.",
+    },
+    {
+      q: "How accurate are the AI predictions?",
+      a: "The AI models are trained on medical imaging datasets and continuously optimized to provide high-confidence tumor detection and classification results.",
+    },
+    {
+      q: "Can I export scan reports?",
+      a: "Yes. Doctors and students can export scan summaries, AI analysis results, and reports directly from the dashboard.",
+    },
+  ];
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-<BackToProfile />
-      <h1 className="text-3xl font-bold text-slate-900">FAQ</h1>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 to-white">
+      
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-400/10 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="space-y-3">
-        {faqs.map((f, i) => (
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        
+        {/* Back Button */}
+        <div className="mb-6">
+          <BackToProfile />
+        </div>
+
+        {/* Header */}
+        <div className="text-center mb-12">
+          
+          {/* Badge */}
           <div
-            key={i}
-            className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm"
+            className="
+              inline-flex items-center gap-2
+              px-4 py-2
+              rounded-full
+              bg-emerald-50
+              border border-emerald-100
+              text-emerald-600
+              text-sm font-semibold
+              shadow-sm
+            "
           >
-            <button
-              onClick={() => setOpen(open === i ? null : i)}
-              className="w-full flex justify-between items-center p-4"
-            >
-              <span className="font-medium text-slate-800">{f.q}</span>
-
-              <ChevronDown
-                className={`w-5 h-5 transition ${
-                  open === i ? "rotate-180 text-[#2EC4A5]" : ""
-                }`}
-              />
-            </button>
-
-            {open === i && (
-              <div className="px-4 pb-4 text-sm text-slate-500">
-                {f.a}
-              </div>
-            )}
+            <Sparkles size={16} />
+            BrainAI Help Center
           </div>
-        ))}
+
+          {/* Title */}
+          <h1
+            className="
+              mt-5
+              text-4xl sm:text-5xl
+              font-black
+              tracking-[-0.04em]
+              text-slate-900
+            "
+          >
+            Frequently Asked
+            <span className="block bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+              Questions
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            className="
+              mt-5
+              max-w-2xl mx-auto
+              text-base sm:text-lg
+              leading-relaxed
+              text-slate-500
+            "
+          >
+            Find answers about MRI analysis, AI predictions,
+            security, reports, and how BrainAI works.
+          </p>
+        </div>
+
+        {/* FAQ Items */}
+        <div className="space-y-4">
+          {faqs.map((f, i) => {
+            const isOpen = open === i;
+
+            return (
+              <motion.div
+                key={i}
+                layout
+                transition={{
+                  duration: 0.35,
+                  type: "spring",
+                  stiffness: 120,
+                }}
+                className={`
+                  group relative overflow-hidden rounded-3xl
+                  border transition-all duration-500
+                  
+                  ${
+                    isOpen
+                      ? `
+                        border-emerald-200
+                        bg-white
+                        shadow-[0_15px_50px_rgba(16,185,129,0.08)]
+                      `
+                      : `
+                        border-slate-200/80
+                        bg-white/90
+                        hover:border-emerald-100
+                        hover:shadow-xl
+                      `
+                  }
+                `}
+              >
+                {/* Hover Glow */}
+                <div
+                  className="
+                    absolute inset-0
+                    bg-gradient-to-r
+                    from-emerald-50/0
+                    via-emerald-50/40
+                    to-teal-50/0
+
+                    opacity-0
+                    group-hover:opacity-100
+
+                    transition-opacity duration-700
+                  "
+                />
+
+                {/* Question */}
+                <button
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  className="
+                    relative z-10
+                    w-full flex items-center justify-between
+                    gap-4
+                    px-6 sm:px-7
+                    py-5 sm:py-6
+                    text-left
+                  "
+                >
+                  <div className="flex items-start gap-4">
+                    
+                    {/* Number */}
+                    <div
+                      className={`
+                        w-10 h-10 rounded-2xl
+                        flex items-center justify-center
+                        text-sm font-bold
+                        transition-all duration-500
+                        
+                        ${
+                          isOpen
+                            ? `
+                              bg-gradient-to-br
+                              from-emerald-400
+                              to-teal-500
+                              text-white
+                              shadow-lg shadow-emerald-500/25
+                            `
+                            : `
+                              bg-slate-100
+                              text-slate-500
+                              group-hover:bg-emerald-50
+                              group-hover:text-emerald-600
+                            `
+                        }
+                      `}
+                    >
+                      {i + 1}
+                    </div>
+
+                    {/* Question */}
+                    <div>
+                      <h3
+                        className={`
+                          text-base sm:text-lg
+                          font-bold
+                          tracking-[-0.02em]
+                          transition-colors duration-300
+                          
+                          ${
+                            isOpen
+                              ? "text-slate-900"
+                              : "text-slate-700 group-hover:text-slate-900"
+                          }
+                        `}
+                      >
+                        {f.q}
+                      </h3>
+
+                      <p className="mt-1 text-sm text-slate-400">
+                        Click to view answer
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Arrow */}
+                  <motion.div
+                    animate={{
+                      rotate: isOpen ? 180 : 0,
+                    }}
+                    transition={{
+                      duration: 0.35,
+                    }}
+                    className={`
+                      shrink-0
+                      w-10 h-10 rounded-2xl
+                      flex items-center justify-center
+                      transition-all duration-300
+                      
+                      ${
+                        isOpen
+                          ? `
+                            bg-emerald-50
+                            text-emerald-500
+                          `
+                          : `
+                            bg-slate-100
+                            text-slate-400
+                            group-hover:bg-emerald-50
+                            group-hover:text-emerald-500
+                          `
+                      }
+                    `}
+                  >
+                    <ChevronDown size={18} />
+                  </motion.div>
+                </button>
+
+                {/* Answer */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{
+                        duration: 0.35,
+                      }}
+                    >
+                      <div className="px-6 sm:px-7 pb-6 sm:pb-7">
+                        
+                        {/* Divider */}
+                        <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-5" />
+
+                        {/* Answer */}
+                        <div className="flex gap-4">
+                          
+                          {/* Accent Line */}
+                          <div className="w-[3px] rounded-full bg-gradient-to-b from-emerald-400 to-teal-500" />
+
+                          <p
+                            className="
+                              text-sm sm:text-[15px]
+                              leading-8
+                              text-slate-600
+                            "
+                          >
+                            {f.a}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

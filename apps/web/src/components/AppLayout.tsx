@@ -18,6 +18,7 @@ import {
   HelpCircle,
   ShieldCheck,
   Sparkles,
+  ChevronRight,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { 
@@ -367,6 +368,7 @@ function NotificationDropdown({
 }
 
 // ─── User Menu Dropdown ────────────────────────────────────────────────────────
+
 function UserMenuDropdown({
   user,
   onClose,
@@ -378,78 +380,427 @@ function UserMenuDropdown({
   onNavigate: (path: string) => void;
   onLogout: () => void;
 }) {
+  const [location] = useLocation();
+
+ 
+
+  // ───────── Route Builder ─────────
+  const buildProfileRoute = (tab: string) => {
+    return `profile`;
+  };
+
+  // ───────── Menu Items ─────────
   const items = [
-    { label: "Profile", icon: User, path: "profile" },
-    { label: "Settings", icon: Settings, path: "profile" },
-    { label: "Change Password", icon: Key, path: "profile?tab=password" },
-    { label: "Help & Support", icon: HelpCircle, path: "faq" },
+    {
+      label: "My Profile",
+      desc: "Manage your personal information",
+      icon: User,
+      tab: "profile",
+      color: "emerald",
+    },
+  
+   
+   
   ];
+
+  // ───────── Icon Colors ─────────
+  const colorStyles: Record<string, string> = {
+    emerald:
+      "bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100",
+
+    blue:
+      "bg-blue-50 text-blue-500 group-hover:bg-blue-100",
+
+    amber:
+      "bg-amber-50 text-amber-500 group-hover:bg-amber-100",
+
+    purple:
+      "bg-purple-50 text-purple-500 group-hover:bg-purple-100",
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -8, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -8, scale: 0.96 }}
-      transition={{ duration: 0.15, ease: "easeOut" }}
-      className="absolute right-0 top-full mt-2 w-[240px]
-        bg-white rounded-2xl shadow-2xl border border-slate-200/60 
-        overflow-hidden z-[100]"
+      initial={{
+        opacity: 0,
+        y: -10,
+        scale: 0.96,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      }}
+      exit={{
+        opacity: 0,
+        y: -10,
+        scale: 0.96,
+      }}
+      transition={{
+        duration: 0.22,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="
+        absolute right-0 top-full mt-3
+        w-[310px]
+
+        rounded-[28px]
+
+        border border-slate-200/70
+
+        bg-white/95
+        backdrop-blur-2xl
+
+        shadow-[0_25px_80px_rgba(15,23,42,0.14)]
+
+        overflow-hidden
+        z-[200]
+      "
     >
-      {/* User info */}
-      <div className="px-4 py-4 border-b border-slate-100">
-        <p className="font-semibold text-slate-800 text-sm truncate">
-          {user?.fullName || "User"}
-        </p>
-        <p className="text-xs text-slate-400 truncate mt-0.5">
-          {user?.email || ""}
-        </p>
+      {/* ───────── Background Glow ───────── */}
+      <div
+        className="
+          absolute top-0 right-0
+          w-40 h-40
+
+          bg-emerald-400/10
+
+          blur-3xl
+          rounded-full
+
+          pointer-events-none
+        "
+      />
+
+      {/* ───────── User Info ───────── */}
+      <div
+        className="
+          relative px-5 py-5
+          border-b border-slate-100
+        "
+      >
+        <div className="flex items-center gap-4">
+
+          {/* Avatar */}
+          <div className="relative">
+
+            {/* Online Dot */}
+            <div
+              className="
+                absolute bottom-0 right-0
+
+                w-3.5 h-3.5
+                rounded-full
+
+                bg-emerald-400
+
+                border-2 border-white
+
+                shadow-sm
+              "
+            />
+
+            <div
+              className="
+                w-14 h-14
+                rounded-2xl
+
+                bg-gradient-to-br
+                from-emerald-400
+                via-teal-500
+                to-emerald-600
+
+                flex items-center justify-center
+
+                text-white
+                text-lg
+                font-bold
+
+                shadow-lg
+                shadow-emerald-500/20
+              "
+            >
+              {user?.fullName?.charAt(0)?.toUpperCase() || "U"}
+            </div>
+          </div>
+
+          {/* User Details */}
+          <div className="min-w-0 flex-1">
+
+            <h3
+              className="
+                text-[15px]
+                font-bold
+                text-slate-900
+                truncate
+              "
+            >
+              {user?.fullName || "User"}
+            </h3>
+
+            <p
+              className="
+                text-sm
+                text-slate-400
+                truncate
+                mt-1
+              "
+            >
+              {user?.email || "user@email.com"}
+            </p>
+
+            {/* Secure Badge */}
+            <div
+              className="
+                mt-2
+
+                inline-flex items-center gap-1.5
+
+                px-2 py-1
+                rounded-full
+
+                bg-emerald-50
+                border border-emerald-100
+
+                text-[11px]
+                font-semibold
+
+                text-emerald-600
+              "
+            >
+              <ShieldCheck size={11} />
+              Secure Account
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Menu items */}
-      <div className="p-1.5">
+      {/* ───────── Menu Items ───────── */}
+      <div className="relative p-2">
         {items.map((item) => {
           const Icon = item.icon;
+
           return (
             <button
               key={item.label}
               onClick={() => {
-                onNavigate(item.path);
+                onNavigate(
+                  buildProfileRoute(item.tab)
+                );
+
                 onClose();
               }}
               className="
-                w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm
-                text-slate-600 hover:text-slate-800 hover:bg-slate-50
-                transition-all duration-200 group
+                group relative
+                w-full
+
+                flex items-center gap-4
+
+                px-3 py-3.5
+                rounded-2xl
+
+                transition-all duration-300
+
+                hover:bg-slate-50
+                hover:translate-x-[2px]
               "
             >
-              <Icon
+              {/* Icon */}
+              <div
+                className={`
+                  w-11 h-11
+                  rounded-2xl
+
+                  flex items-center justify-center
+
+                  transition-all duration-300
+                  shrink-0
+
+                  ${colorStyles[item.color]}
+                `}
+              >
+                <Icon size={18} />
+              </div>
+
+              {/* Text */}
+              <div className="flex-1 text-left min-w-0">
+
+                <p
+                  className="
+                    text-sm
+                    font-semibold
+
+                    text-slate-700
+
+                    group-hover:text-slate-900
+
+                    transition-colors
+                  "
+                >
+                  {item.label}
+                </p>
+
+                <p
+                  className="
+                    text-[12px]
+                    text-slate-400
+                    truncate
+                    mt-0.5
+                  "
+                >
+                  {item.desc}
+                </p>
+              </div>
+
+              {/* Arrow */}
+              <ChevronRight
                 size={16}
-                className="text-slate-400 group-hover:text-[#2EC4A5] transition-colors"
+                className="
+                  text-slate-300
+
+                  opacity-0
+                  -translate-x-1
+
+                  group-hover:opacity-100
+                  group-hover:translate-x-0
+
+                  transition-all duration-300
+                "
               />
-              {item.label}
             </button>
           );
         })}
       </div>
 
-      {/* Divider + Logout */}
-      <div className="border-t border-slate-100 p-1.5">
+      {/* ───────── Divider ───────── */}
+      <div className="px-4">
+        <div
+          className="
+            h-px
+
+            bg-gradient-to-r
+            from-transparent
+            via-slate-200
+            to-transparent
+          "
+        />
+      </div>
+
+      {/* ───────── Logout ───────── */}
+      <div className="p-2">
         <button
           onClick={() => {
             onLogout();
             onClose();
           }}
           className="
-            w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm
-            text-red-500 hover:bg-red-50
-            transition-all duration-200 group
+            group relative overflow-hidden
+            w-full
+
+            flex items-center gap-4
+
+            px-3 py-3.5
+            rounded-2xl
+
+            transition-all duration-300
+
+            bg-gradient-to-r
+            from-red-50
+            to-rose-50
+
+            border border-red-100
+
+            hover:shadow-[0_15px_35px_rgba(239,68,68,0.12)]
+
+            hover:border-red-200
+            hover:translate-y-[-1px]
           "
         >
-          <LogOut
-            size={16}
-            className="text-red-400 group-hover:text-red-500 transition-colors"
+          {/* Glow */}
+          <div
+            className="
+              absolute inset-0
+
+              bg-gradient-to-r
+              from-red-100/0
+              via-red-100/40
+              to-rose-100/0
+
+              opacity-0
+              group-hover:opacity-100
+
+              transition-opacity duration-500
+            "
           />
-          Log Out
+
+          {/* Icon */}
+          <div
+            className="
+              relative z-10
+
+              w-11 h-11
+              rounded-2xl
+
+              bg-white/80
+              border border-red-100
+
+              flex items-center justify-center
+
+              shadow-sm
+
+              transition-all duration-300
+
+              group-hover:rotate-6
+            "
+          >
+            <LogOut
+              size={18}
+              className="
+                text-red-500
+
+                group-hover:scale-110
+
+                transition-transform duration-300
+              "
+            />
+          </div>
+
+          {/* Text */}
+          <div className="relative z-10 flex-1 text-left">
+
+            <p
+              className="
+                text-sm
+                font-bold
+                text-red-500
+              "
+            >
+              Logout
+            </p>
+
+            <p
+              className="
+                text-[12px]
+                text-red-400
+                mt-0.5
+              "
+            >
+              End your current session
+            </p>
+          </div>
+
+          {/* Arrow */}
+          <ChevronRight
+            size={16}
+            className="
+              relative z-10
+
+              text-red-300
+
+              transition-all duration-300
+
+              group-hover:translate-x-1
+            "
+          />
         </button>
       </div>
     </motion.div>
@@ -753,6 +1104,7 @@ function SidebarContent({
   navItems,
   roleBadge,
   location,
+  onLogout,
 }: {
   collapsed?: boolean;
   onItemClick?: () => void;
@@ -761,6 +1113,7 @@ function SidebarContent({
   navItems: NavItem[];
   roleBadge: React.ReactNode;
   location: string;
+  onLogout: () => void;
 }) {
   return (
     <div className="flex flex-col h-full overflow-hidden bg-white/95 backdrop-blur-xl border-r border-slate-100">
@@ -855,44 +1208,110 @@ function SidebarContent({
       {/* ───────── Bottom Section ───────── */}
       <div className="px-4 pb-6 pt-4 border-t border-slate-100 bg-white/80 backdrop-blur-md">
         
-        {!collapsed && (
-          <div
-            className="
-              flex items-center gap-3
-              px-4 py-3
-              rounded-2xl
-              bg-gradient-to-br from-slate-50 to-slate-100/70
-              border border-slate-100
-              shadow-sm
-            "
-          >
-            {/* Icon */}
-            <div
-              className="
-                w-9 h-9 rounded-xl
-                bg-emerald-100
-                flex items-center justify-center
-                shrink-0
-              "
-            >
-              <ShieldCheck
-                size={18}
-                className="text-emerald-600"
-              />
-            </div>
+        
+        {/* ───────── Logout Button ───────── */}
+<button
+  onClick={onLogout}
+  className={`
+    group relative overflow-hidden
+    mt-4 w-full
 
-            {/* Text */}
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-slate-700 truncate">
-                HIPAA Secure
-              </p>
+    flex items-center
+    ${collapsed ? "justify-center px-0 h-[52px]" : "gap-3 px-4 h-[56px]"}
 
-              <p className="text-[11px] text-slate-400 truncate">
-                End-to-end encrypted system
-              </p>
-            </div>
-          </div>
-        )}
+    rounded-2xl
+    border border-red-100
+
+    bg-gradient-to-r
+    from-red-50
+    to-rose-50
+
+    text-red-500
+
+    transition-all duration-500
+
+    hover:scale-[1.02]
+    hover:shadow-[0_15px_35px_rgba(239,68,68,0.15)]
+    hover:border-red-200
+  `}
+>
+  {/* Hover Glow */}
+  <div
+    className="
+      absolute inset-0
+      bg-gradient-to-r
+      from-red-100/0
+      via-red-100/50
+      to-rose-100/0
+
+      opacity-0
+      group-hover:opacity-100
+
+      transition-opacity duration-500
+    "
+  />
+
+  {/* Icon */}
+  <div
+    className={`
+      relative z-10
+      flex items-center justify-center shrink-0
+
+      ${
+        collapsed
+          ? "w-10 h-10 rounded-xl"
+          : "w-11 h-11 rounded-2xl"
+      }
+
+      bg-white/80
+      border border-red-100
+      shadow-sm
+
+      transition-all duration-500
+
+      group-hover:bg-white
+      group-hover:rotate-6
+    `}
+  >
+    <LogOut
+      size={19}
+      className="
+        text-red-500
+        transition-transform duration-500
+        group-hover:scale-110
+      "
+    />
+  </div>
+
+  {/* Text */}
+  {!collapsed && (
+    <div className="relative z-10 flex flex-col items-start">
+      <span className="text-sm font-bold tracking-[-0.02em]">
+        Logout
+      </span>
+
+     
+    </div>
+  )}
+
+  {/* Arrow */}
+  {!collapsed && (
+    <ChevronRight
+      size={16}
+      className="
+        relative z-10
+        ml-auto
+
+        text-red-300
+
+        transition-all duration-500
+
+        group-hover:translate-x-1
+        group-hover:text-red-400
+      "
+    />
+  )}
+</button>
 
         {/* Collapse Button */}
         {showToggle && onToggle && (
@@ -1071,6 +1490,7 @@ export function AppLayout({ children, navItems, roleBadge }: AppLayoutProps) {
           navItems={navItems}
           roleBadge={roleBadge}
           location={location}
+          onLogout={logout}
         />
       </aside>
 
@@ -1100,6 +1520,7 @@ export function AppLayout({ children, navItems, roleBadge }: AppLayoutProps) {
                 navItems={navItems}
                 roleBadge={roleBadge}
                 location={location}
+                onLogout={logout}
               />
             </motion.aside>
           </>
