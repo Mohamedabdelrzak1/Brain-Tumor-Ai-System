@@ -177,6 +177,7 @@ export async function apiFetchJson<T>(
 }
 
 type NotificationsResponse = {
+  notifications: never[];
   totalCount: number;
   page: number;
   pageSize: number;

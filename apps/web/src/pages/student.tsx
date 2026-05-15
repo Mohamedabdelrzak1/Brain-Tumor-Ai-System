@@ -38,7 +38,7 @@ import { changePassword, deleteScan7138, getAnalysisDetails7138, getMyAnalysis71
   getNotificationSettings, getScanById7138, getStudentDashboard, runAnalysis7138, Scan7138, ScansResponse, 
   updateNotificationSettings, updateProfile, uploadScan7138, 
  getNotifications,
-  getUnreadCount,
+  getAllTumorTypes,
   markNotificationAsRead,
   deleteNotification,
   markAllNotificationsAsRead,} from "@/lib/api7138";
@@ -752,6 +752,127 @@ export function UploadScanModal({
         >
           Upload & Analyze
         </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Tumor Types (read-only for students) ──────────────────────────────────────────────────────
+export function TumorTypes() {
+  const { toast } = useToast();
+
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // ================= FETCH =================
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const res = await getAllTumorTypes();
+      setData(res || []);
+    } catch {
+      toast({
+        title: "Error",
+        description: "Failed to load tumor types",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <div className="space-y-6 pb-10">
+
+      {/* ================= HEADER ================= */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        
+        <div>
+          <h1 className="text-3xl font-bold text-slate-800">
+            Tumor Types
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            View all tumor categories in the system
+          </p>
+        </div>
+      </div>
+
+      {/* ✅ MOBILE CARDS (Visible on Mobile only) */}
+      <div className="grid grid-cols-1 gap-4 sm:hidden px-1">
+        {loading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm animate-pulse">
+              <div className="h-5 w-24 bg-gray-200 rounded-full mb-3" />
+              <div className="h-4 w-full bg-gray-100 rounded-md" />
+            </div>
+          ))
+        ) : data.length === 0 ? (
+          <div className="py-12 text-center bg-white rounded-3xl border border-slate-100 shadow-sm">
+            <div className="text-4xl mb-3">🧠</div>
+            <p className="text-gray-400 font-medium">No tumor types found</p>
+          </div>
+        ) : (
+          data.map((t) => (
+            <div key={t.id} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 rounded-full bg-[#2EC4A5]" />
+                <h3 className="font-bold text-slate-800">{t.name}</h3>
+              </div>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                {t.description || "No description available for this category."}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* ✅ DESKTOP TABLE (Hidden on Mobile) */}
+      <div className="hidden sm:block bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-6 py-4 text-left font-semibold whitespace-nowrap">Name</th>
+                <th className="px-6 py-4 text-left font-semibold">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {loading &&
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={i}>
+                    <td className="px-6 py-4">
+                      <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 w-64 bg-gray-200 rounded animate-pulse" />
+                    </td>
+                  </tr>
+                ))}
+              {!loading && data.length === 0 && (
+                <tr>
+                  <td colSpan={2} className="py-20 text-center text-gray-400">
+                    No tumor types found
+                  </td>
+                </tr>
+              )}
+              {!loading &&
+                data.map((t) => (
+                  <tr key={t.id} className="hover:bg-slate-50 transition duration-200">
+                    <td className="px-6 py-4 font-semibold text-slate-800 whitespace-nowrap">
+                      {t.name}
+                    </td>
+                    <td className="px-6 py-4 text-gray-500">
+                      <p className="">{t.description || "-"}</p>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

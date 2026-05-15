@@ -1280,80 +1280,125 @@ export function AdminTumorTypes() {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-10">
 
       {/* HEADER */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-3xl font-bold text-slate-800">
           Tumor Types
         </h1>
 
         <button
           onClick={() => setCreateModal(true)}
-          className="bg-[#2EC4A5] text-white px-5 py-3 rounded-xl font-semibold"
+          className="w-full sm:w-auto bg-[#2EC4A5] hover:bg-[#28b096] text-white px-5 py-3 rounded-xl font-semibold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2"
         >
-          + Add Tumor
+          <Plus size={18} /> Add Tumor
         </button>
       </div>
 
-      {/* TABLE */}
-      <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
-        <table className="w-full text-sm">
-
-          <thead className="bg-slate-50 text-slate-600">
-            <tr>
-              <th className="px-6 py-4 text-left">Name</th>
-              <th className="px-6 py-4 text-left">Description</th>
-              <th className="px-6 py-4 text-right">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody className="divide-y">
-
-            {loading ? (
-              <tr>
-                <td colSpan={3} className="text-center py-20 text-gray-400">
-                  Loading...
-                </td>
-              </tr>
-            ) : data.map((t) => (
-              <tr key={t.id} className="hover:bg-slate-50">
-
-                <td className="px-6 py-4 font-semibold">
-                  {t.name}
-                </td>
-
-                <td className="px-6 py-4 text-gray-500">
-                  {t.description}
-                </td>
-
-                <td className="px-6 py-4 text-right space-x-2">
-
+      {/* ✅ MOBILE CARDS (Visible on Mobile only) */}
+      <div className="grid grid-cols-1 gap-4 sm:hidden">
+        {loading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="bg-white p-5 rounded-2xl border border-slate-100 animate-pulse">
+              <div className="h-5 w-32 bg-gray-200 rounded mb-3" />
+              <div className="h-4 w-full bg-gray-100 rounded mb-4" />
+              <div className="flex justify-end gap-2">
+                <div className="h-9 w-9 bg-gray-200 rounded-xl" />
+                <div className="h-9 w-9 bg-gray-200 rounded-xl" />
+              </div>
+            </div>
+          ))
+        ) : data.length === 0 ? (
+          <div className="py-12 text-center bg-white rounded-2xl border border-slate-100">
+            <div className="text-4xl mb-3">🧠</div>
+            <p className="text-gray-400">No tumor types found</p>
+          </div>
+        ) : (
+          data.map((t) => (
+            <div key={t.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+              <div className="flex justify-between items-start gap-4 mb-2">
+                <h3 className="font-bold text-slate-800 text-lg leading-tight">{t.name}</h3>
+                <div className="flex shrink-0 gap-1">
                   <button
                     onClick={() => setEditItem(t)}
-                    className="text-blue-500"
+                    className="p-2.5 text-blue-500 bg-blue-50 rounded-xl"
                   >
-                    ✏️
+                    <Edit2 size={16} />
                   </button>
-
                   <button
                     onClick={async () => {
-                      await deleteTumorType(t.id);
-                      toast({ title: "Deleted successfully" });
-                      fetchData();
+                      if (window.confirm("Are you sure?")) {
+                        await deleteTumorType(t.id);
+                        toast({ title: "Deleted successfully" });
+                        fetchData();
+                      }
                     }}
-                    className="text-red-500"
+                    className="p-2.5 text-red-500 bg-red-50 rounded-xl"
                   >
-                    🗑️
+                    <Trash2 size={16} />
                   </button>
+                </div>
+              </div>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                {t.description || "No description provided."}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
 
-                </td>
-
+      {/* ✅ DESKTOP TABLE (Hidden on Mobile) */}
+      <div className="hidden sm:block bg-white rounded-2xl shadow-sm border overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-6 py-4 text-left font-semibold">Name</th>
+                <th className="px-6 py-4 text-left font-semibold">Description</th>
+                <th className="px-6 py-4 text-right font-semibold">Actions</th>
               </tr>
-            ))}
-
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y">
+              {loading ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={i}>
+                    <td className="px-6 py-4"><div className="h-4 w-32 bg-gray-200 rounded animate-pulse" /></td>
+                    <td className="px-6 py-4"><div className="h-4 w-64 bg-gray-200 rounded animate-pulse" /></td>
+                    <td className="px-6 py-4"><div className="h-8 w-20 bg-gray-200 rounded animate-pulse ml-auto" /></td>
+                  </tr>
+                ))
+              ) : data.map((t) => (
+                <tr key={t.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-6 py-4 font-semibold text-slate-800">{t.name}</td>
+                  <td className="px-6 py-4 text-gray-500">{t.description}</td>
+                  <td className="px-6 py-4 text-right">
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => setEditItem(t)}
+                        className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                      <button
+                        onClick={async () => {
+                          if (window.confirm("Are you sure?")) {
+                            await deleteTumorType(t.id);
+                            toast({ title: "Deleted successfully" });
+                            fetchData();
+                          }
+                        }}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* MODALS */}
@@ -1431,9 +1476,9 @@ function TumorModal({ tumor, onClose, onSaved }: any) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
 
-      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
 
         {/* HEADER */}
         <div className="bg-gradient-to-r from-[#2EC4A5] to-indigo-500 text-white px-6 py-5 flex justify-between">

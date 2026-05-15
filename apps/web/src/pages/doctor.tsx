@@ -2461,9 +2461,9 @@ function TumorModal({ tumor, onClose, onSaved }: any) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
 
-      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
 
         {/* HEADER */}
         <div className="bg-gradient-to-r from-[#2EC4A5] to-indigo-500 text-white px-6 py-5 flex justify-between">
@@ -2563,80 +2563,78 @@ export function TumorTypes() {
        
       </div>
 
-      {/* ================= CARD ================= */}
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+      {/* ✅ MOBILE CARDS (Visible on Mobile only) */}
+      <div className="grid grid-cols-1 gap-4 sm:hidden px-1">
+        {loading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm animate-pulse">
+              <div className="h-5 w-24 bg-gray-200 rounded-full mb-3" />
+              <div className="h-4 w-full bg-gray-100 rounded-md" />
+            </div>
+          ))
+        ) : data.length === 0 ? (
+          <div className="py-12 text-center bg-white rounded-3xl border border-slate-100 shadow-sm">
+            <div className="text-4xl mb-3">🧠</div>
+            <p className="text-gray-400 font-medium">No tumor types found</p>
+          </div>
+        ) : (
+          data.map((t) => (
+            <div key={t.id} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 rounded-full bg-[#2EC4A5]" />
+                <h3 className="font-bold text-slate-800">{t.name}</h3>
+              </div>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                {t.description || "No description available for this category."}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
 
-        <table className="w-full text-sm">
-
-          {/* HEADER */}
-          <thead className="bg-slate-50 text-slate-600">
-            <tr>
-              <th className="px-6 py-4 text-left font-semibold">Name</th>
-              <th className="px-6 py-4 text-left font-semibold">Description</th>
-            
-            </tr>
-          </thead>
-
-          {/* BODY */}
-          <tbody className="divide-y">
-
-            {/* 🔥 LOADING */}
-            {loading &&
-              Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i}>
-                  <td className="px-6 py-4">
-                    <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="h-4 w-64 bg-gray-200 rounded animate-pulse" />
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="h-8 w-20 bg-gray-200 rounded animate-pulse ml-auto" />
-                  </td>
-                </tr>
-              ))}
-
-            {/* ❌ EMPTY */}
-            {!loading && data.length === 0 && (
+      {/* ✅ DESKTOP TABLE (Hidden on Mobile) */}
+      <div className="hidden sm:block bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-slate-50 text-slate-600">
               <tr>
-                <td colSpan={3} className="py-20 text-center">
-                  <div className="flex flex-col items-center gap-3 text-gray-400">
-                    <div className="text-5xl">🧠</div>
-                    <p className="font-medium">No tumor types found</p>
-                    <button
-                      onClick={() => setCreateModal(true)}
-                      className="mt-2 px-4 py-2 rounded-lg bg-[#2EC4A5] text-white text-sm"
-                    >
-                      Add First Tumor
-                    </button>
-                  </div>
-                </td>
+                <th className="px-6 py-4 text-left font-semibold whitespace-nowrap">Name</th>
+                <th className="px-6 py-4 text-left font-semibold">Description</th>
               </tr>
-            )}
-
-            {/* ✅ DATA */}
-            {!loading &&
-              data.map((t) => (
-                <tr
-                  key={t.id}
-                  className="hover:bg-slate-50 transition duration-200"
-                >
-                  {/* NAME */}
-                  <td className="px-6 py-4 font-semibold text-slate-800">
-                    {t.name}
+            </thead>
+            <tbody className="divide-y">
+              {loading &&
+                Array.from({ length: 5 }).map((_, i) => (
+                  <tr key={i}>
+                    <td className="px-6 py-4">
+                      <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 w-64 bg-gray-200 rounded animate-pulse" />
+                    </td>
+                  </tr>
+                ))}
+              {!loading && data.length === 0 && (
+                <tr>
+                  <td colSpan={2} className="py-20 text-center text-gray-400">
+                    No tumor types found
                   </td>
-
-                  {/* DESCRIPTION */}
-                  <td className="px-6 py-4 text-gray-500 max-w-[400px] truncate">
-                    {t.description || "-"}
-                  </td>
-
-                
                 </tr>
-              ))}
-
-          </tbody>
-        </table>
+              )}
+              {!loading &&
+                data.map((t) => (
+                  <tr key={t.id} className="hover:bg-slate-50 transition duration-200">
+                    <td className="px-6 py-4 font-semibold text-slate-800 whitespace-nowrap">
+                      {t.name}
+                    </td>
+                    <td className="px-6 py-4 text-gray-500">
+                      <p className="">{t.description || "-"}</p>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* ================= MODALS ================= */}
